@@ -1,0 +1,40 @@
+{{template "layout" .}}
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}}
+{{end}}
+
+{{define "content"}}
+    <h2>Posts</h2>
+    <nav class="submenu">
+      <a class="btn primary" href="/admin/posts/new">Novo post</a>
+    </nav>
+    <div class="table-responsible">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th width="160">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .posts}}
+          <tr>
+            <td>{{.Id}}</td>
+            <td>{{.Title}}</td>
+            <td>
+              <a class="btn link small" href="/admin/posts/view?id={{.Id}}">Ver</a>
+              <a class="btn primary small" href="/admin/posts/edit?id={{.Id}}">Editar</a>
+              <a class="btn danger small" href="/admin/posts/delete?id={{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>    
+    </div>
+{{end}}
+
+{{define "scripts"}}
+{{end}}

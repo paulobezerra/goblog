@@ -1,0 +1,44 @@
+{{template "layout" .}}
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}}
+{{end}}
+
+{{define "content"}}
+    <h2>Usuários</h2>
+    <nav class="submenu">
+      <a class="btn primary" href="/admin/users/new">Novo usuários</a>
+    </nav>
+    <div class="table-responsible">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nome do usuário</th>
+            <th>Nome completo</th>
+            <th width="160">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .users}}
+          <tr>
+            <td>{{.Id}}</td>
+            <td>{{.Username}}</td>
+            <td>{{.Firstname}} {{.Lastname}}</td>
+            <td>
+              <a class="btn link small" href="/admin/users/view?id={{.Id}}">Ver</a>
+              <a class="btn primary small" href="/admin/users/edit?id={{.Id}}">Editar</a>
+              {{if ne .Username "admin"}}
+                <a class="btn danger small" href="/admin/users/delete?id={{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
+              {{- end}}
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>    
+    </div>
+{{end}}
+
+{{define "scripts"}}
+{{end}}

@@ -1,0 +1,25 @@
+{{template "layout" .}} 
+{{define "title"}}Login | Go Blog{{end}}
+
+{{define "links"}}
+<link rel="stylesheet" href="public/styles/login.css" />
+{{end}} 
+
+{{define "content"}}
+<div class="login-container">
+<h2>Informe os dados de acesso:</h2>
+  <form action="/login" method="post">
+    <label>Login</label>
+    <input type="text" name="username" placeholder="Seu usuário..." />
+    
+    <label>Password</label>
+    <input type="password" name="password" placeholder="Sua senha" />
+    
+    <button type="submit" name="login">Entrar</button>
+    <p class="error">{{.}}</p>
+  </form>
+</div>
+{{end}} 
+
+{{define "scripts"}}
+{{end}}

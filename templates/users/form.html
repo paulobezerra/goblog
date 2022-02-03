@@ -1,0 +1,35 @@
+{{template "layout" .}} 
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}} {{end}} 
+
+{{define "content"}}
+  <h2>{{.FormTitle}}</h2>
+  <form class="vertical-form" method="post">
+    <label>Nome de usuário:</label>
+    <input type="text" name="username" placeholder="Seu usuário..." value="{{.Username}}" />
+    <p class="error-message">{{.ValidationMessages.Username}}</p>
+
+    <label>Primeiro nome:</label>
+    <input type="text" name="firstname" placeholder="Seu nome..." value="{{.Firstname}}"/>
+    <p class="error-message">{{.ValidationMessages.Firstname}}</p>
+
+    <label>Sobrenome:</label>
+    <input type="text" name="lastname" placeholder="Seu sobrenome..." value="{{.Lastname}}"/>
+    <p class="error-message">{{.ValidationMessages.Lastname}}</p>
+
+    <label>Password:</label>
+    <input type="password" name="password" placeholder="Sua senha..." />
+    <p class="error-message">{{.ValidationMessages.Password}}</p>
+    <div class="actions">
+      <p class="error-message">{{.ErrorMessage}}</p>
+      <div class="btns">
+        <a href="/admin/users" class="btn link">Voltar</a>
+        <button type="submit" name="login" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </form>
+{{end}} 
+
+{{define "scripts"}} {{end}}

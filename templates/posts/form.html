@@ -1,0 +1,55 @@
+{{template "layout" .}} 
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}}{{end}} 
+
+{{define "content"}}
+  <h2>{{.FormTitle}}</h2>
+  <form method="post">
+    
+    <label>Título:</label>
+    <input type="text" name="title" placeholder="Título do post" value="{{.Title}}" onchange="generateSlug(this, 'input-slug')"/>
+    <p class="error-message">{{.ValidationMessages.Title}}</p>
+    
+    <label>Resumo:</label>
+    <div>
+      <textarea name="abstract" rows="5" maxlength="500">{{.Abstract}}</textarea>
+    </div>
+    <p class="error-message">{{.ValidationMessages.Abstract}}</p>
+
+    <label>Conteúdo:</label>
+    <div>
+      <textarea name="content" id="editor" rows="15">{{.Content}}</textarea>
+    </div>
+    <p class="error-message">{{.ValidationMessages.Content}}</p>
+
+    <label>Slug:</label>
+    <input type="text" name="slug" id="input-slug" placeholder="Gerado automaticamente" value="{{.Slug}}"/>
+    <p class="error-message"></p>
+    
+
+    <label>Tags:</label>
+    <input type="text" name="tags" placeholder="Ex: JavaScript, Java, PHP, Frontend" value="{{.Tags}}"/>
+    <p class="error-message">{{.ValidationMessages.Tags}}</p>
+
+    <div class="actions">
+      <p class="error-message">{{.ErrorMessage}}</p>
+      <div class="btns">
+        <a href="/admin/posts" class="btn link">Voltar</a>
+        <button type="submit" name="login" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </form>
+{{end}} 
+
+{{define "scripts"}}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  window.onload = function() {
+    tinymce.init({
+      selector: '#editor'
+    });
+  }
+</script>
+{{end}}

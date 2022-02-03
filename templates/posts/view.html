@@ -1,0 +1,45 @@
+{{template "layout" .}} 
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}} {{end}} 
+
+{{define "content"}}
+  <h2>Dados do post</h2>
+  <form method="post">
+    
+    <label>Título:</label>
+    <input type="text" name="title" placeholder="Título do post" value="{{.Title}}" disabled="disabled"/>
+    <p class="error-message">{{.ValidationMessages.Title}}</p>
+
+    <label>Resumo:</label>
+    <div>
+      <textarea name="abstract" rows="5" disabled="disabled">{{.Abstract}}</textarea>
+    </div>
+    <p class="error-message">{{.ValidationMessages.Abstract}}</p>
+    
+    <label>Conteúdo:</label>
+    <div>{{.Content}}</div>
+    <p class="error-message">{{.ValidationMessages.Lastname}}</p>
+
+    <label>Slug:</label>
+    <input type="text" name="slug" id="input-slug" placeholder="Gerado automaticamente" value="{{.Slug}}" disabled="disabled" />
+    <p class="error-message"></p>
+
+    <label>Tags:</label>
+    <input type="text" name="tags" placeholder="Ex: JavaScript, Java, PHP, Frontend" value="{{.Tags}}"  disabled="disabled"/>
+    <p class="error-message">{{.ValidationMessages.Tags}}</p>
+    <div class="actions mt">
+      <p class="error-message">{{.ErrorMessage}}</p>
+      <div class="btns">
+        <a href="/admin/posts" class="btn link">Voltar</a>
+        {{if ne .Username "admin"}}
+          <a href="/admin/posts/delete?id={{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
+        {{end}}
+        <a href="/admin/posts/edit?id={{.Id}}" class="btn primary">Editar</a>
+      </div>
+    </div>
+  </form>
+{{end}} 
+
+{{define "scripts"}} {{end}}

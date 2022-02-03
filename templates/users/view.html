@@ -1,0 +1,35 @@
+{{template "layout" .}} 
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}} {{end}} 
+
+{{define "content"}}
+  <h2>Dados do usuário</h2>
+  <form class="vertical-form" method="post">
+    <label>Nome de usuário:</label>
+    <input type="text" name="username" placeholder="Seu usuário..." value="{{.Username}}" disabled="disabled"/>
+    <span></span>
+
+    <label>Primeiro nome:</label>
+    <input type="text" name="firstname" placeholder="Seu nome..." value="{{.Firstname}}" disabled="disabled"/>
+    <span></span>
+
+    <label>Sobrenome:</label>
+    <input type="text" name="lastname" placeholder="Seu sobrenome..." value="{{.Lastname}}"  disabled="disabled"/>
+    <span></span>
+    
+    <div class="actions">
+      <p class="error-message">{{.ErrorMessage}}</p>
+      <div class="btns">
+        <a href="/admin/users" class="btn link">Voltar</a>
+        {{if ne .Username "admin"}}
+          <a href="/admin/users/delete?id={{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
+        {{end}}
+        <a href="/admin/users/edit?id={{.Id}}" class="btn primary">Editar</a>
+      </div>
+    </div>
+  </form>
+{{end}} 
+
+{{define "scripts"}} {{end}}

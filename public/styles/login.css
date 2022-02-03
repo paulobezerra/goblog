@@ -1,0 +1,23 @@
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto 0;
+}
+
+h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+form {
+    background-color: var(--gray-100);
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.login-container form p.error {
+    font-size: .9rem;
+    color: var(--danger);
+    font-weight: bold;
+    text-align: center;
+    margin-top: 1rem;
+}

@@ -1,0 +1,27 @@
+{{template "layout" .}}
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}}
+{{end}}
+
+{{define "content"}}
+{{range .posts}}
+    <div class="post">
+        <h3><a href="/post?slug={{.Slug}}">{{.Title}}</a></h3>
+        <div class="metadata">
+            <p class="updated-at">Ataulizado em <strong>{{.UpdatedAt.Format "02/01/06 15:04"}}</strong></p>
+            <p class="author">Escrito por <strong>Paulo Bezerra</strong></p>
+        </div>
+        <div class="abstract">
+            {{.Abstract}}
+        </div>
+        <p class="go-to-post">
+            <a href="/post?slug={{.Slug}}">Saiba mais...</a>
+        </p>
+    </div>
+{{end}}
+{{end}}
+
+{{define "scripts"}}
+{{end}}
