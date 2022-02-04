@@ -22,7 +22,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		user := models.FindOneUserByUsername(username)
 
 		if utils.CheckPasswordHash(password, user.Password) {
-			jwt := helpers.GenerateJWT(*user)
+			jwt := helpers.GenerateJWT(user)
 			helpers.SaveCookie(helpers.CookieNameWithAuthToken, jwt, w)
 
 			http.Redirect(w, r, "/admin/posts", http.StatusFound)

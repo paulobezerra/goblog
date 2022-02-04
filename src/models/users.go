@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/paulobezerra/goblog/src/db"
 	"github.com/paulobezerra/goblog/src/utils"
 )
@@ -15,170 +13,63 @@ type User struct {
 	Password  string `json:"-"`
 }
 
-func GetUser(id string) *User {
-	conn := db.GetConnect()
-	defer conn.Close()
+func GetUser(id string) User {
+	db := db.GetConnect()
 
-	row := conn.QueryRow("select id, username, firstname, lastname, password from users where id = ?", id)
+	var user User
+	db.First(&user, id)
 
-	if row == nil {
-		return nil
-	}
-
-	u := User{}
-
-	row.Scan(&u.Id, &u.Username, &u.Firstname, &u.Lastname, &u.Password)
-
-	return &u
+	return user
 }
 
-func FindOneUserByUsername(username string) *User {
-	conn := db.GetConnect()
-	defer conn.Close()
+func FindOneUserByUsername(username string) User {
+	db := db.GetConnect()
 
-	row := conn.QueryRow("select id, username, firstname, lastname, password from users where username = ?", username)
+	var user User
+	db.Find(&user, "username = ?", username)
 
-	if row == nil {
-		return nil
-	}
-
-	u := User{}
-
-	row.Scan(&u.Id, &u.Username, &u.Firstname, &u.Lastname, &u.Password)
-
-	return &u
+	return user
 }
 
-func FindAllUsers() *[]User {
-	conn := db.GetConnect()
-	defer conn.Close()
+func FindAllUsers() []User {
+	db := db.GetConnect()
 
-	rows, err := conn.Query("select id, username, firstname, lastname from users")
-	utils.CheckErr(err)
-	defer rows.Close()
+	var users []User
 
-	users := []User{}
-	for rows.Next() {
-		u := User{}
-		rows.Scan(&u.Id, &u.Username, &u.Firstname, &u.Lastname)
-		users = append(users, u)
-	}
+	db.Find(&users)
 
-	return &users
+	return users
 }
 
-func ValidateUser(username string, firstname string, lastname string, password string, update bool) (map[string]string, bool) {
-	var messages = map[string]string{}
-	var valid = true
+func CreateUser(username string, firstname string, lastname string, password string) User {
+	db := db.GetConnect()
 
-	if username == "" {
-		messages["Username"] = "Nome do usuário deve ser informado"
-		valid = false
-	}
+	user := User{Username: username, Firstname: firstname, Lastname: lastname, Password: password}
 
-	if firstname == "" {
-		messages["Firstname"] = "Primeiro nome deve ser informado"
-		valid = false
-	}
+	db.Create(&user)
 
-	if lastname == "" {
-		messages["Lastname"] = "Sobrenome deve ser informado"
-		valid = false
-	}
-	if !update {
-		user := FindOneUserByUsername(username)
-		if user.Id != 0 {
-			messages["Username"] = "Já existe um usuário com este nome"
-			valid = false
-		}
-
-		if password == "" {
-			messages["Password"] = "Senha deve ser informado"
-			valid = false
-		} else if len(password) < 6 {
-			messages["Password"] = "Senha deve conter no mínimo 6 caracteres"
-			valid = false
-		}
-	}
-
-	return messages, valid
+	return user
 }
 
-func CreateUser(username string, firstname string, lastname string, password string) *string {
-	conn := db.GetConnect()
-	defer conn.Close()
+func UpdateUser(id string, username string, firstname string, lastname string, password string) User {
+	db := db.GetConnect()
 
-	stmt, err := conn.Prepare("insert into users (username, firstname, lastname, password) values (?, ?, ?, ?);")
-	if err != nil {
-		fmt.Print(err.Error())
-		message := "Erro ao inserir usuário no banco de dados."
-		return &message
-	}
-	defer stmt.Close()
-	passwordHash, _ := utils.HashPassword(password)
-	_, errExecute := stmt.Exec(username, firstname, lastname, passwordHash)
-	if errExecute != nil {
-		fmt.Print(errExecute.Error())
-		message := "Erro ao inserir usuário no banco de dados."
-		return &message
-	}
+	var user User
+	db.First(&user, id)
 
-	return nil
-}
-
-func UpdateUser(id string, username string, firstname string, lastname string, password string) *string {
-	conn := db.GetConnect()
-	defer conn.Close()
-
-	var query string = "update users set username = ?, firstname = ?, lastname = ?"
-	fmt.Println(password)
-	if password != "" {
-		query += ", password = ?"
-	}
-	query += " where id = ?"
-
-	stmt, err := conn.Prepare(query)
-	if err != nil {
-		fmt.Print(err.Error())
-		message := "Erro ao inserir usuário no banco de dados."
-		return &message
-	}
-	defer stmt.Close()
-	var errExecute error
+	user.Username = username
+	user.Firstname = firstname
+	user.Lastname = lastname
 	if password != "" {
 		passwordHash, _ := utils.HashPassword(password)
-		_, errExecute = stmt.Exec(username, firstname, lastname, passwordHash, id)
-	} else {
-		_, errExecute = stmt.Exec(username, firstname, lastname, id)
+		user.Password = passwordHash
 	}
-	if errExecute != nil {
-		fmt.Print(errExecute.Error())
-		message := "Erro ao atualizar usuário no banco de dados."
-		return &message
-	}
+	db.Save(&user)
 
-	return nil
+	return user
 }
 
-func DeleteUser(id string) *string {
-	conn := db.GetConnect()
-	defer conn.Close()
-
-	var query string = "delete from users where id = ?"
-
-	stmt, err := conn.Prepare(query)
-	if err != nil {
-		fmt.Print(err.Error())
-		message := "Erro ao inserir usuário no banco de dados."
-		return &message
-	}
-	defer stmt.Close()
-	_, errExecute := stmt.Exec(id)
-	if errExecute != nil {
-		fmt.Print(errExecute.Error())
-		message := "Erro ao excluir usuário no banco de dados."
-		return &message
-	}
-
-	return nil
+func DeleteUser(id string) {
+	db := db.GetConnect()
+	db.Delete(&User{}, id)
 }

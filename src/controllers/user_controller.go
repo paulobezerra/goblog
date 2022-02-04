@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/paulobezerra/goblog/src/controllers/helpers"
+	"github.com/paulobezerra/goblog/src/controllers/validators"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
@@ -41,10 +42,10 @@ func CreateUsers(w http.ResponseWriter, r *http.Request) {
 		lastname = r.FormValue("lastname")
 		password := r.FormValue("password")
 
-		validationMessages, valid = models.ValidateUser(username, firstname, lastname, password, false)
+		validationMessages, valid = validators.ValidateUser(username, firstname, lastname, password, false)
 		if valid {
-			errorMessage = models.CreateUser(username, firstname, lastname, password)
-			if errorMessage == nil {
+			user := models.CreateUser(username, firstname, lastname, password)
+			if user.Id > 0 {
 				http.Redirect(w, r, "/admin/users", http.StatusFound)
 			}
 		}
@@ -89,10 +90,10 @@ func UpdateUsers(w http.ResponseWriter, r *http.Request) {
 		firstname = r.FormValue("firstname")
 		lastname = r.FormValue("lastname")
 		password := r.FormValue("password")
-		validationMessages, valid = models.ValidateUser(username, firstname, lastname, password, true)
+		validationMessages, valid = validators.ValidateUser(username, firstname, lastname, password, true)
 		if valid {
-			errorMessage = models.UpdateUser(id, username, firstname, lastname, password)
-			if errorMessage == nil {
+			user := models.UpdateUser(id, username, firstname, lastname, password)
+			if user.Id > 0 {
 				http.Redirect(w, r, "/admin/users", http.StatusFound)
 			}
 		}

@@ -4,13 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/paulobezerra/goblog/src/db"
+	"github.com/paulobezerra/goblog/src/models"
 	"github.com/paulobezerra/goblog/src/routers"
 )
 
 func main() {
 
-	db.InitDB()
+	models.InitDB()
 
 	mux := routers.Init()
 

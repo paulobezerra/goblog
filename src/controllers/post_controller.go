@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/paulobezerra/goblog/src/controllers/helpers"
+	"github.com/paulobezerra/goblog/src/controllers/validators"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
@@ -44,10 +45,10 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		content = r.FormValue("content")
 		tags = r.FormValue("tags")
 
-		validationMessages, valid = models.ValidatePost("0", slug, title, abstract, content, tags)
+		validationMessages, valid = validators.ValidatePost("0", slug, title, abstract, content, tags)
 		if valid {
-			errorMessage = models.CreatePost(slug, title, abstract, content, tags)
-			if errorMessage == nil {
+			post := models.CreatePost(slug, title, abstract, content, tags)
+			if post.Id > 0 {
 				http.Redirect(w, r, "/admin/posts", http.StatusFound)
 			}
 		}
@@ -99,10 +100,10 @@ func UpdatePost(w http.ResponseWriter, r *http.Request) {
 		abstract = r.FormValue("abstract")
 		content = r.FormValue("content")
 		tags = r.FormValue("tags")
-		validationMessages, valid = models.ValidatePost(id, slug, title, abstract, content, tags)
+		validationMessages, valid = validators.ValidatePost(id, slug, title, abstract, content, tags)
 		if valid {
-			errorMessage = models.UpdatePost(id, slug, title, abstract, content, tags)
-			if errorMessage == nil {
+			post := models.UpdatePost(id, slug, title, abstract, content, tags)
+			if post.Id > 0 {
 				http.Redirect(w, r, "/admin/posts", http.StatusFound)
 			}
 		}

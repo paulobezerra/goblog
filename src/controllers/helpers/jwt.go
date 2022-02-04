@@ -37,7 +37,7 @@ func GetUserByJWT(hash string) (*models.User, error) {
 		userJson, _ := json.Marshal(claims["user"])
 		json.Unmarshal(userJson, &user)
 		dbUser := models.GetUser(strconv.Itoa(user.Id))
-		return dbUser, nil
+		return &dbUser, nil
 	}
 
 	return nil, err
