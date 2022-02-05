@@ -27,35 +27,6 @@ func NewPostFormData(title string, user models.User) PostFormData {
 	}
 }
 
-func (form *PostFormData) GetPost() models.Post {
-	var post models.Post
-
-	if form.Id > 0 {
-		post.Id = form.Id
-	}
-
-	post.Slug = form.Slug
-	post.Title = form.Title
-	post.Abstract = form.Abstract
-	post.Content = form.Content
-	post.Tags = form.Tags
-
-	return post
-}
-
-func (form *PostFormData) SetPost(post models.Post) {
-
-	if post.Id > 0 {
-		form.Id = post.Id
-	}
-
-	form.Slug = post.Slug
-	form.Title = post.Title
-	form.Abstract = post.Abstract
-	form.Content = post.Content
-	form.Tags = post.Tags
-}
-
 func (form *PostFormData) SetPostId(id string) {
 	idInt, _ := strconv.Atoi(id)
 	form.Id = idInt

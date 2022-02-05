@@ -28,8 +28,7 @@ func CreateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, us
 
 	form.LoadFormData(r)
 
-	user := form.GetUser()
-	if validators.ValidateUser(form) && user.Create() {
+	if validators.ValidateUser(form) && form.User.Create() {
 		http.Redirect(w, r, "/admin/users", http.StatusFound)
 	}
 
@@ -44,7 +43,7 @@ func FormUpdateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 		http.Redirect(w, r, "/admin/users", http.StatusFound)
 		return
 	}
-	form.SetUser(user)
+	form.User = user
 	helpers.RenderTemplate(w, "layout_admin", "users/form", form)
 }
 
@@ -54,8 +53,7 @@ func UpdateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, us
 	form.SetUserId(p.ByName("id"))
 	form.LoadFormData(r)
 
-	user := form.GetUser()
-	if validators.ValidateUser(form) && user.Save() {
+	if validators.ValidateUser(form) && form.User.Save() {
 		http.Redirect(w, r, "/admin/users", http.StatusFound)
 		return
 	}
@@ -71,7 +69,7 @@ func ViewUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, user
 		http.Redirect(w, r, "/admin/users", http.StatusFound)
 		return
 	}
-	form.SetUser(user)
+	form.User = user
 	helpers.RenderTemplate(w, "layout_admin", "users/view", form)
 }
 

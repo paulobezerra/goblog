@@ -27,32 +27,6 @@ func NewUserFormData(title string, user models.User) UserFormData {
 	}
 }
 
-func (form *UserFormData) GetUser() models.User {
-	var user models.User
-
-	if form.Id > 0 {
-		user.Id = form.Id
-	}
-
-	user.Username = form.Username
-	user.Firstname = form.Firstname
-	user.Lastname = form.Lastname
-	user.Password = form.Password
-
-	return user
-}
-
-func (form *UserFormData) SetUser(user models.User) {
-
-	if user.Id > 0 {
-		form.Id = user.Id
-	}
-
-	form.Username = user.Username
-	form.Firstname = user.Firstname
-	form.Lastname = user.Lastname
-}
-
 func (form *UserFormData) SetUserId(id string) {
 	idInt, _ := strconv.Atoi(id)
 	form.Id = idInt

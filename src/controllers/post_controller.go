@@ -30,8 +30,7 @@ func FormCreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 func CreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
 	form := forms.NewPostFormData("Novo post", user)
 	form.LoadFormData(r)
-	post := form.GetPost()
-	if validators.ValidatePost(&form) && post.Create() {
+	if validators.ValidatePost(&form) && form.Post.Create() {
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
@@ -46,7 +45,7 @@ func FormUpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
-	form.SetPost(*post)
+	form.Post = *post
 	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
 }
 
@@ -54,8 +53,7 @@ func UpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 	form := forms.NewPostFormData("Novo post", user)
 	form.SetPostId(p.ByName("id"))
 	form.LoadFormData(r)
-	post := form.GetPost()
-	if validators.ValidatePost(&form) && post.Save() {
+	if validators.ValidatePost(&form) && form.Post.Save() {
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
@@ -70,7 +68,7 @@ func ViewPost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user 
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
-	form.SetPost(*post)
+	form.Post = *post
 	helpers.RenderTemplate(w, "layout_admin", "posts/view", form)
 }
 
