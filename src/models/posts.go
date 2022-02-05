@@ -15,7 +15,7 @@ type Post struct {
 	Title      string    `json:"title"`
 	Content    string    `json:"content"`
 	Abstract   string    `json:"abstract"`
-	AuthorId   string    `json:"author_id"`
+	AuthorId   int       `json:"author_id"`
 	Author     User      `json:"author" gorm:"foreignKey:AuthorId"`
 	CategoryId int       `json:"category_id"`
 	Category   Category  `json:"category" gorm:"foreignKey:CategoryId"`
@@ -27,7 +27,7 @@ func GetPost(id int) *Post {
 	db := configs.GetConnect()
 
 	var post Post
-	db.First(&post, id)
+	db.Preload("Tags").Joins("Category").First(&post, id)
 
 	return &post
 }
@@ -44,7 +44,7 @@ func FindAllPosts() []Post {
 	db := configs.GetConnect()
 
 	var posts []Post
-	db.Find(&posts)
+	db.Preload("Tags").Joins("Category").Find(&posts)
 
 	return posts
 }
@@ -60,7 +60,11 @@ func (post *Post) Create() bool {
 
 func (post *Post) Save() bool {
 	db := configs.GetConnect()
-	if err := db.Save(&post).Error; err != nil {
+	if err := db.Model(&post).Association("Tags").Replace(post.Tags); err != nil {
+		log.Println(err)
+		return false
+	}
+	if err := db.Save(&post).Omit("Tags").Error; err != nil {
 		log.Println(err)
 		return false
 	}

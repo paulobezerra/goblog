@@ -4,9 +4,11 @@ import (
 	"log"
 
 	"github.com/paulobezerra/goblog/src/configs"
+	"gorm.io/gorm"
 )
 
 type Category struct {
+	gorm.Model
 	Id          int    `json:"id"`
 	Description string `json:"description"`
 }

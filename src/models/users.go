@@ -5,9 +5,11 @@ import (
 
 	"github.com/paulobezerra/goblog/src/configs"
 	"github.com/paulobezerra/goblog/src/utils"
+	"gorm.io/gorm"
 )
 
 type User struct {
+	gorm.Model
 	Id        int    `json:"id"`
 	Username  string `json:"username"`
 	Firstname string `json:"firstname"`

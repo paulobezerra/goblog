@@ -42,7 +42,7 @@ a {
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ul,
@@ -87,7 +87,7 @@ main header nav ul {
 
 main header nav ul li.active a {
   font-weight: bold;
-  color: var(--primary)
+  color: var(--primary);
 }
 
 main header nav ul li.exit a {
@@ -119,7 +119,9 @@ form label {
   font-size: 0.9rem;
 }
 
-form input, form textarea{
+form input,
+form textarea,
+form select {
   font-size: 0.9rem;
   min-height: 2rem;
   border: 1px solid var(--gray-100);
@@ -127,6 +129,14 @@ form input, form textarea{
   border-radius: 3px;
   padding: 0.5rem;
   width: 100%;
+  background-color: var(--gray-100);
+}
+
+form input[type="checkbox"] {
+  width: auto;
+  min-width: 1rem;
+  line-height: 2rem;
+  padding: 0;
 }
 
 form button {
@@ -140,6 +150,18 @@ form button {
   font-size: 1rem;
 }
 
+form .checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+form .checkbox-group label {
+  line-height: 2rem;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -150,18 +172,18 @@ table tr th {
   border-bottom: 2px solid var(--gray-700);
   text-align: left;
   line-height: 1.8rem;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 table tr td {
   border-bottom: 1px solid var(--gray-500);
   line-height: 1.8rem;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 table tr td a {
   text-decoration: underline;
-  color: var(--primary)
+  color: var(--primary);
 }
 
 table tbody tr:nth-child(odd) {
@@ -198,21 +220,21 @@ table tbody tr:nth-child(odd) {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .post.full .metadata {
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--gray-300);
 }
 
 .post h3 {
   font-size: 1.5rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .post .abstract {
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .post .go-to-post {
@@ -222,4 +244,14 @@ table tbody tr:nth-child(odd) {
 .post .go-to-post a {
   font-weight: bold;
   color: var(--primary);
-} 
+}
+
+.tags {
+  display: inline-block;
+  background-color: var(--gray-300);
+  border-radius: 10px;
+  height: 1rem;
+  font-size: .75rem;
+  line-height: 1rem;
+  padding-inline: .5em;
+}

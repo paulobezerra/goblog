@@ -14,16 +14,22 @@
       <table>
         <thead>
           <tr>
-            <th>Id</th>
             <th>Título</th>
+            <th>Categoria</th>
+            <th>Tags</th>
             <th width="160">Ações</th>
           </tr>
         </thead>
         <tbody>
-          {{range .posts}}
+          {{range .Posts}}
           <tr>
-            <td>{{.Id}}</td>
             <td>{{.Title}}</td>
+            <td>{{.Category.Description}}</td>
+            <td>
+              {{range .Tags}}
+                <span class="tags">{{.Description}}</span>
+              {{end}}
+            </td>
             <td>
               <a class="btn link small" href="/admin/posts/view/{{.Id}}">Ver</a>
               <a class="btn primary small" href="/admin/posts/edit/{{.Id}}">Editar</a>

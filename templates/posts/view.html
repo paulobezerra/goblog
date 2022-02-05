@@ -26,9 +26,20 @@
     <input type="text" name="slug" id="input-slug" placeholder="Gerado automaticamente" value="{{.Slug}}" disabled="disabled" />
     <p class="error-message"></p>
 
-    <label>Tags:</label>
-    <input type="text" name="tags" placeholder="Ex: JavaScript, Java, PHP, Frontend" value="{{.Tags}}"  disabled="disabled"/>
-    <p class="error-message">{{.ValidationMessages.Tags}}</p>
+    <label>Categoria:</label>
+    <select name="category" disabled="disabled">
+      <option value="">Selecione</option>
+      {{$post := .}}
+      {{range .AllCategories}}
+        {{$post.CategoryId}} {{.Id}}
+        {{if eq $post.CategoryId .Id}}
+          <option value="{{.Id}}" selected>{{.Description}}</option>
+        {{ else }}
+          <option value="{{.Id}}">{{.Description}}</option>
+        {{end}}
+      {{end}}
+    </select>
+    <p class="error-message">{{.ValidationMessages.Category}}</p>
     <div class="actions mt">
       <p class="error-message"></p>
       <div class="btns">

@@ -23,8 +23,9 @@ func IndexPosts(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 }
 
 func FormCreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
-	data := dto.NewPostDto("Novo post", user)
-	helpers.RenderTemplate(w, "layout_admin", "posts/form", data)
+	form := dto.NewPostDto("Novo post", user)
+	loadCategoriesAndTags(&form)
+	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
 }
 
 func CreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
@@ -34,6 +35,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
+	loadCategoriesAndTags(&form)
 	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
 }
 
@@ -46,6 +48,7 @@ func FormUpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 		return
 	}
 	form.Post = *post
+	loadCategoriesAndTags(&form)
 	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
 }
 
@@ -57,6 +60,7 @@ func UpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
 		return
 	}
+	loadCategoriesAndTags(&form)
 	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
 }
 
@@ -69,6 +73,7 @@ func ViewPost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user 
 		return
 	}
 	form.Post = *post
+	loadCategoriesAndTags(&form)
 	helpers.RenderTemplate(w, "layout_admin", "posts/view", form)
 }
 
@@ -81,4 +86,9 @@ func DeletePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 		post.Delete()
 	}
 	http.Redirect(w, r, "/admin/posts", http.StatusFound)
+}
+
+func loadCategoriesAndTags(data *dto.PostDto) {
+	data.AllTags = models.FindAllTags()
+	data.AllCategories = models.FindAllCategories()
 }

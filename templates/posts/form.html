@@ -27,10 +27,34 @@
     <label>Slug:</label>
     <input type="text" name="slug" id="input-slug" placeholder="Gerado automaticamente" value="{{.Slug}}"/>
     <p class="error-message">{{.ValidationMessages.Slug}}</p>
-    
+
+    {{$post := .}}
+    <label>Categoria:</label>
+    <select name="category">
+      <option value="">Selecione</option>
+      {{range .AllCategories}}
+        {{if eq $post.CategoryId .Id}}
+          <option value="{{.Id}}" selected>{{.Description}}</option>
+        {{ else }}
+          <option value="{{.Id}}">{{.Description}}</option>
+        {{end}}
+      {{end}}
+    </select>
+    <p class="error-message">{{.ValidationMessages.Category}}</p>
 
     <label>Tags:</label>
-    <input type="text" name="tags" placeholder="Ex: JavaScript, Java, PHP, Frontend" value="{{.Tags}}"/>
+      <div class="checkbox-group">
+        {{range .AllTags}}
+            <label>
+              {{if $post.ContainsTag .Id}}
+                <input type="checkbox" name="tags" checked="checked" value="{{.Id}}"/>
+              {{ else }}
+                <input type="checkbox" name="tags" value="{{.Id}}"/>
+              {{end}}
+              {{.Description}}
+            </label>
+        {{end}}
+      </div>
     <p class="error-message">{{.ValidationMessages.Tags}}</p>
 
     <div class="actions">

@@ -1,12 +1,15 @@
 package models
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/paulobezerra/goblog/src/configs"
+	"gorm.io/gorm"
 )
 
 type Tag struct {
+	gorm.Model
 	Id          int    `json:"id"`
 	Description string `json:"description"`
 }
@@ -23,10 +26,21 @@ func GetTag(id int) *Tag {
 func FindAllTags() []Tag {
 	db := configs.GetConnect()
 
-	var categories []Tag
-	db.Find(&categories)
+	var tags []Tag
+	db.Find(&tags)
 
-	return categories
+	return tags
+}
+
+func FindTagsById(ids []int) []Tag {
+	db := configs.GetConnect()
+
+	fmt.Println("BUSCANDO TAGS PELOS IDS", ids)
+
+	var tags []Tag
+	db.Find(&tags, "id in (?)", ids)
+
+	return tags
 }
 
 func (category *Tag) Create() bool {

@@ -23,6 +23,11 @@ func ValidatePost(form *dto.PostDto) bool {
 		valid = false
 	}
 
+	if form.CategoryId == 0 {
+		form.ValidationMessages["Category"] = "Categoria deve ser selecinada"
+		valid = false
+	}
+
 	// if form.Tags == "" {
 	// 	form.ValidationMessages["Tags"] = "Tags deve ser informado"
 	// 	valid = false
