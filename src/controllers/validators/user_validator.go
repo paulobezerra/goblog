@@ -1,11 +1,11 @@
 package validators
 
 import (
-	"github.com/paulobezerra/goblog/src/controllers/forms"
+	"github.com/paulobezerra/goblog/src/controllers/dto"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
-func ValidateUser(form forms.UserFormData) bool {
+func ValidateUser(form dto.UserDto) bool {
 	var valid = true
 
 	if form.Username == "" {

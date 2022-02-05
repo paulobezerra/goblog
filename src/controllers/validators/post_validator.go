@@ -1,11 +1,11 @@
 package validators
 
 import (
-	"github.com/paulobezerra/goblog/src/controllers/forms"
+	"github.com/paulobezerra/goblog/src/controllers/dto"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
-func ValidatePost(form *forms.PostFormData) bool {
+func ValidatePost(form *dto.PostDto) bool {
 	var valid = true
 
 	if form.Slug == "" {

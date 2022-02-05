@@ -1,6 +1,6 @@
-package forms
+package dto
 
-type Form struct {
+type FormDto struct {
 	FormTitle          string
 	ValidationMessages map[string]string
 }

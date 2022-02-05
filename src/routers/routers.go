@@ -13,18 +13,6 @@ var router httprouter.Router
 
 type Handle func(http.ResponseWriter, *http.Request, httprouter.Params, models.User)
 
-func validateToken(h Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-		if err != nil {
-			http.Redirect(w, r, "/", http.StatusFound)
-			return
-		}
-
-		h(w, r, ps, *user)
-	}
-}
-
 func Init() *httprouter.Router {
 	router = *httprouter.New()
 	router.GET("/", controllers.Index)
@@ -51,4 +39,16 @@ func Init() *httprouter.Router {
 	router.GET("/admin/posts/delete/:id", validateToken(controllers.DeletePost))
 
 	return &router
+}
+
+func validateToken(h Handle) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
+		if err != nil {
+			http.Redirect(w, r, "/", http.StatusFound)
+			return
+		}
+
+		h(w, r, ps, *user)
+	}
 }

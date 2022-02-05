@@ -5,26 +5,25 @@ import (
 	"strconv"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/paulobezerra/goblog/src/controllers/forms"
+	"github.com/paulobezerra/goblog/src/controllers/dto"
 	"github.com/paulobezerra/goblog/src/controllers/helpers"
-	"github.com/paulobezerra/goblog/src/controllers/pages"
 	"github.com/paulobezerra/goblog/src/controllers/validators"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
 func IndexUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, userAuth models.User) {
 	users := models.FindAllUsers()
-	page := pages.NewUserIndexPage(userAuth, users)
+	page := dto.NewUserIndexDto(userAuth, users)
 	helpers.RenderTemplate(w, "layout_admin", "users/index", page)
 }
 
 func FormCreateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
-	data := forms.NewUserFormData("Novo usuário", user)
+	data := dto.NewUserDto("Novo usuário", user)
 	helpers.RenderTemplate(w, "layout_admin", "users/form", data)
 }
 
 func CreateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, userAuth models.User) {
-	form := forms.NewUserFormData("Novo usuário", userAuth)
+	form := dto.NewUserDto("Novo usuário", userAuth)
 
 	form.LoadFormData(r)
 
@@ -36,7 +35,7 @@ func CreateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, us
 }
 
 func FormUpdateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params, userAuth models.User) {
-	form := forms.NewUserFormData("Editar usuário", userAuth)
+	form := dto.NewUserDto("Editar usuário", userAuth)
 	form.SetUserId(p.ByName("id"))
 	user := models.GetUser(form.Id)
 	if user.Id == 0 {
@@ -48,7 +47,7 @@ func FormUpdateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 }
 
 func UpdateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, userAuth models.User) {
-	form := forms.NewUserFormData("Novo usuário", userAuth)
+	form := dto.NewUserDto("Novo usuário", userAuth)
 
 	form.SetUserId(p.ByName("id"))
 	form.LoadFormData(r)
@@ -62,7 +61,7 @@ func UpdateUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, us
 }
 
 func ViewUsers(w http.ResponseWriter, r *http.Request, p httprouter.Params, userAuth models.User) {
-	form := forms.NewUserFormData("Editar usuário", userAuth)
+	form := dto.NewUserDto("Editar usuário", userAuth)
 	form.SetUserId(p.ByName("id"))
 	user := models.GetUser(form.Id)
 	if user.Id == 0 {

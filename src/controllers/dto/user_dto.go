@@ -1,38 +1,37 @@
-package forms
+package dto
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/paulobezerra/goblog/src/controllers/pages"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
-type UserFormData struct {
-	Form
-	pages.Dashboard
+type UserDto struct {
+	FormDto
+	DashboardDto
 	models.User
 }
 
-func NewUserFormData(title string, user models.User) UserFormData {
-	return UserFormData{
-		Form: Form{
+func NewUserDto(title string, user models.User) UserDto {
+	return UserDto{
+		FormDto: FormDto{
 			FormTitle:          title,
 			ValidationMessages: map[string]string{},
 		},
-		Dashboard: pages.Dashboard{
+		DashboardDto: DashboardDto{
 			UsersActive: "active",
 			User:        user,
 		},
 	}
 }
 
-func (form *UserFormData) SetUserId(id string) {
+func (form *UserDto) SetUserId(id string) {
 	idInt, _ := strconv.Atoi(id)
 	form.Id = idInt
 }
 
-func (form *UserFormData) LoadFormData(r *http.Request) {
+func (form *UserDto) LoadFormData(r *http.Request) {
 	form.Username = r.FormValue("username")
 	form.Firstname = r.FormValue("firstname")
 	form.Lastname = r.FormValue("lastname")

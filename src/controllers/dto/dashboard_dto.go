@@ -1,8 +1,8 @@
-package pages
+package dto
 
 import "github.com/paulobezerra/goblog/src/models"
 
-type Dashboard struct {
+type DashboardDto struct {
 	User        models.User
 	PostsActive string
 	UsersActive string
