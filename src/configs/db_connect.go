@@ -8,7 +8,7 @@ import (
 )
 
 func GetConnect() *gorm.DB {
-	db, err := gorm.Open(mysql.Open("root:teste123@tcp(localhost:49154)/go_blog?parseTime=true"), &gorm.Config{
+	db, err := gorm.Open(mysql.Open("root:teste123@tcp(localhost:49153)/go_blog?parseTime=true"), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	utils.CheckErr(err)

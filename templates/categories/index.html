@@ -1,0 +1,38 @@
+{{template "layout" .}}
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}}
+{{end}}
+
+{{define "content"}}
+    <h2>Usuários</h2>
+    <nav class="submenu">
+      <a class="btn primary" href="/admin/categories/new">Nova categoria</a>
+    </nav>
+    <div class="table-responsible">
+      <table>
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th width="160">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Categories}}
+          <tr>
+            <td>{{.Description}}</td>
+            <td>
+              <a class="btn link small" href="/admin/categories/view/{{.Id}}">Ver</a>
+              <a class="btn primary small" href="/admin/categories/edit/{{.Id}}">Editar</a>
+              <a class="btn danger small" href="/admin/categories/delete/{{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>    
+    </div>
+{{end}}
+
+{{define "scripts"}}
+{{end}}

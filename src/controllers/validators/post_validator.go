@@ -23,10 +23,10 @@ func ValidatePost(form *dto.PostDto) bool {
 		valid = false
 	}
 
-	if form.Tags == "" {
-		form.ValidationMessages["Tags"] = "Tags deve ser informado"
-		valid = false
-	}
+	// if form.Tags == "" {
+	// 	form.ValidationMessages["Tags"] = "Tags deve ser informado"
+	// 	valid = false
+	// }
 
 	post := models.FindOnePostBySlug(form.Slug)
 	if post.Id > 0 && post.Id != form.Id {

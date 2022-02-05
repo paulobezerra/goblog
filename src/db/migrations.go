@@ -16,6 +16,16 @@ func Migrate() {
 		utils.CheckErr(err)
 	}
 
+	log.Println("Run categories migration")
+	if err := db.AutoMigrate(&models.Category{}); err != nil {
+		utils.CheckErr(err)
+	}
+
+	log.Println("Run tags migration")
+	if err := db.AutoMigrate(&models.Tag{}); err != nil {
+		utils.CheckErr(err)
+	}
+
 	log.Println("Run posts migration")
 	if err := db.AutoMigrate(&models.Post{}); err != nil {
 		utils.CheckErr(err)

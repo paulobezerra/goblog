@@ -36,5 +36,5 @@ func (form *PostDto) LoadFormData(r *http.Request) {
 	form.Title = r.FormValue("title")
 	form.Abstract = r.FormValue("abstract")
 	form.Content = r.FormValue("content")
-	form.Tags = r.FormValue("tags")
+	// form.Tags = r.FormValue("tags")
 }

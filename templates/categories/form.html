@@ -1,0 +1,24 @@
+{{template "layout" .}} 
+
+{{define "title"}}Dashboard | Go Blog{{end}} 
+
+{{define "links"}} {{end}} 
+
+{{define "content"}}
+  <h2>{{.FormTitle}}</h2>
+  <form class="vertical-form" method="post">
+    <label>Descrição:</label>
+    <input type="text" name="description" placeholder="Descrição da categoria..." value="{{.Description}}" />
+    <p class="error-message">{{.ValidationMessages.Description}}</p>
+
+    <div class="actions">
+      <p class="error-message"></p>
+      <div class="btns">
+        <a href="/admin/users" class="btn link">Voltar</a>
+        <button type="submit" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </form>
+{{end}} 
+
+{{define "scripts"}} {{end}}
