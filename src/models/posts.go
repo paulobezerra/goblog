@@ -1,9 +1,10 @@
 package models
 
 import (
+	"log"
 	"time"
 
-	"github.com/paulobezerra/goblog/src/db"
+	"github.com/paulobezerra/goblog/src/configs"
 )
 
 type Post struct {
@@ -16,8 +17,8 @@ type Post struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func GetPost(id string) *Post {
-	db := db.GetConnect()
+func GetPost(id int) *Post {
+	db := configs.GetConnect()
 
 	var post Post
 	db.First(&post, id)
@@ -26,16 +27,15 @@ func GetPost(id string) *Post {
 }
 
 func FindOnePostBySlug(slug string) *Post {
-	db := db.GetConnect()
+	db := configs.GetConnect()
 
 	var post Post
 	db.First(&post, "slug = ?", slug)
-
 	return &post
 }
 
 func FindAllPosts() []Post {
-	db := db.GetConnect()
+	db := configs.GetConnect()
 
 	var posts []Post
 	db.Find(&posts)
@@ -43,35 +43,29 @@ func FindAllPosts() []Post {
 	return posts
 }
 
-func CreatePost(slug string, title string, abstract string, content string, tags string) Post {
-	db := db.GetConnect()
-
-	post := Post{Slug: slug, Title: title, Abstract: abstract, Content: content, Tags: tags}
-
-	db.Create(&post)
-
-	return post
+func (post *Post) Create() bool {
+	db := configs.GetConnect()
+	if err := db.Create(&post).Error; err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }
 
-func UpdatePost(id string, slug string, title string, abstract string, content string, tags string) Post {
-	db := db.GetConnect()
-
-	var post Post
-	db.First(&post, id)
-	post.Slug = slug
-	post.Title = title
-	post.Abstract = abstract
-	post.Content = content
-	post.Tags = tags
-
-	db.Save(&post)
-
-	return post
+func (post *Post) Save() bool {
+	db := configs.GetConnect()
+	if err := db.Save(&post).Error; err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }
 
-func DeletePost(id string) {
-	db := db.GetConnect()
-
-	var post Post
-	db.Delete(&post, id)
+func (post *Post) Delete() bool {
+	db := configs.GetConnect()
+	if err := db.Delete(&post).Error; err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }

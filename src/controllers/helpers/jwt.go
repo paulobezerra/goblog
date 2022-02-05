@@ -3,7 +3,6 @@ package helpers
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/paulobezerra/goblog/src/models"
@@ -36,7 +35,7 @@ func GetUserByJWT(hash string) (*models.User, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userJson, _ := json.Marshal(claims["user"])
 		json.Unmarshal(userJson, &user)
-		dbUser := models.GetUser(strconv.Itoa(user.Id))
+		dbUser := models.GetUser(user.Id)
 		return &dbUser, nil
 	}
 

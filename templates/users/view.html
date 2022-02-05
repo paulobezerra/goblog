@@ -20,13 +20,13 @@
     <span></span>
     
     <div class="actions">
-      <p class="error-message">{{.ErrorMessage}}</p>
+      <p class="error-message"></p>
       <div class="btns">
         <a href="/admin/users" class="btn link">Voltar</a>
         {{if ne .Username "admin"}}
-          <a href="/admin/users/delete?id={{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
+          <a href="/admin/users/delete/{{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
         {{end}}
-        <a href="/admin/users/edit?id={{.Id}}" class="btn primary">Editar</a>
+        <a href="/admin/users/edit/{{.Id}}" class="btn primary">Editar</a>
       </div>
     </div>
   </form>

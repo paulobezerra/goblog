@@ -30,13 +30,11 @@
     <input type="text" name="tags" placeholder="Ex: JavaScript, Java, PHP, Frontend" value="{{.Tags}}"  disabled="disabled"/>
     <p class="error-message">{{.ValidationMessages.Tags}}</p>
     <div class="actions mt">
-      <p class="error-message">{{.ErrorMessage}}</p>
+      <p class="error-message"></p>
       <div class="btns">
         <a href="/admin/posts" class="btn link">Voltar</a>
-        {{if ne .Username "admin"}}
-          <a href="/admin/posts/delete?id={{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
-        {{end}}
-        <a href="/admin/posts/edit?id={{.Id}}" class="btn primary">Editar</a>
+        <a href="/admin/posts/delete/{{.Id}}" class="btn danger"  onclick="confirmarExclusao(event)">Excluir</a>
+        <a href="/admin/posts/edit/{{.Id}}" class="btn primary">Editar</a>
       </div>
     </div>
   </form>

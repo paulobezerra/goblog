@@ -25,9 +25,9 @@
             <td>{{.Id}}</td>
             <td>{{.Title}}</td>
             <td>
-              <a class="btn link small" href="/admin/posts/view?id={{.Id}}">Ver</a>
-              <a class="btn primary small" href="/admin/posts/edit?id={{.Id}}">Editar</a>
-              <a class="btn danger small" href="/admin/posts/delete?id={{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
+              <a class="btn link small" href="/admin/posts/view/{{.Id}}">Ver</a>
+              <a class="btn primary small" href="/admin/posts/edit/{{.Id}}">Editar</a>
+              <a class="btn danger small" href="/admin/posts/delete/{{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
             </td>
           </tr>
           {{end}}

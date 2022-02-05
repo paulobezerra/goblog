@@ -1,175 +1,86 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/julienschmidt/httprouter"
+	"github.com/paulobezerra/goblog/src/controllers/forms"
 	"github.com/paulobezerra/goblog/src/controllers/helpers"
 	"github.com/paulobezerra/goblog/src/controllers/validators"
 	"github.com/paulobezerra/goblog/src/models"
 )
 
-func IndexPosts(w http.ResponseWriter, r *http.Request) {
-	user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
+func IndexPosts(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
 	posts := models.FindAllPosts()
 	data := map[string]interface{}{
-		"User":  user,
-		"posts": posts,
+		"PostsActive": "active",
+		"User":        user,
+		"posts":       posts,
 	}
 	helpers.RenderTemplate(w, "layout_admin", "posts/index", data)
 }
 
-func CreatePost(w http.ResponseWriter, r *http.Request) {
-	user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-	var (
-		slug               string            = ""
-		title              string            = ""
-		abstract           string            = ""
-		content            string            = ""
-		tags               string            = ""
-		errorMessage       *string           = nil
-		validationMessages map[string]string = nil
-		valid              bool              = false
-	)
-	if r.Method == "POST" {
-		slug = r.FormValue("slug")
-		title = r.FormValue("title")
-		abstract = r.FormValue("abstract")
-		content = r.FormValue("content")
-		tags = r.FormValue("tags")
-
-		validationMessages, valid = validators.ValidatePost("0", slug, title, abstract, content, tags)
-		if valid {
-			post := models.CreatePost(slug, title, abstract, content, tags)
-			if post.Id > 0 {
-				http.Redirect(w, r, "/admin/posts", http.StatusFound)
-			}
-		}
-	}
-	data := map[string]interface{}{
-		"Slug":               slug,
-		"Title":              title,
-		"Abstract":           abstract,
-		"Content":            content,
-		"Tags":               tags,
-		"ValidationMessages": validationMessages,
-		"ErrorMessage":       &errorMessage,
-		"User":               user,
-		"FormTitle":          "Novo post",
-	}
+func FormCreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	data := forms.NewPostFormData("Novo post", user)
 	helpers.RenderTemplate(w, "layout_admin", "posts/form", data)
 }
 
-func UpdatePost(w http.ResponseWriter, r *http.Request) {
-	user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-	var (
-		slug               string            = ""
-		title              string            = ""
-		abstract           string            = ""
-		content            string            = ""
-		tags               string            = ""
-		errorMessage       *string           = nil
-		validationMessages map[string]string = nil
-		valid              bool              = false
-	)
-	id := r.URL.Query().Get("id")
-	if r.Method == "GET" {
-		post := models.GetPost(id)
-		if user.Id == 0 {
-			http.Redirect(w, r, "/admin/posts", http.StatusFound)
-		}
-		slug = post.Slug
-		title = post.Title
-		abstract = post.Abstract
-		content = post.Content
-		tags = post.Tags
-	} else if r.Method == "POST" {
-		slug = r.FormValue("slug")
-		title = r.FormValue("title")
-		abstract = r.FormValue("abstract")
-		content = r.FormValue("content")
-		tags = r.FormValue("tags")
-		validationMessages, valid = validators.ValidatePost(id, slug, title, abstract, content, tags)
-		if valid {
-			post := models.UpdatePost(id, slug, title, abstract, content, tags)
-			if post.Id > 0 {
-				http.Redirect(w, r, "/admin/posts", http.StatusFound)
-			}
-		}
-	}
-	data := map[string]interface{}{
-		"Slug":               slug,
-		"Title":              title,
-		"Content":            content,
-		"Abstract":           abstract,
-		"Tags":               tags,
-		"ValidationMessages": validationMessages,
-		"ErrorMessage":       &errorMessage,
-		"User":               user,
-		"FormTitle":          "Editar post",
-	}
-	helpers.RenderTemplate(w, "layout_admin", "posts/form", data)
-}
-
-func ViewPost(w http.ResponseWriter, r *http.Request) {
-	user, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-	var (
-		slug               string            = ""
-		title              string            = ""
-		content            string            = ""
-		abstract           string            = ""
-		tags               string            = ""
-		errorMessage       *string           = nil
-		validationMessages map[string]string = nil
-	)
-	id := r.URL.Query().Get("id")
-	post := models.GetPost(id)
-	if user.Id == 0 {
+func CreatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	form := forms.NewPostFormData("Novo post", user)
+	form.LoadFormData(r)
+	post := form.GetPost()
+	if validators.ValidatePost(&form) && post.Create() {
 		http.Redirect(w, r, "/admin/posts", http.StatusFound)
-	}
-	slug = post.Slug
-	title = post.Title
-	abstract = post.Abstract
-	content = post.Content
-	tags = post.Tags
-
-	data := map[string]interface{}{
-		"Id":                 id,
-		"Slug":               slug,
-		"Title":              title,
-		"Abstract":           abstract,
-		"Content":            content,
-		"Tags":               tags,
-		"ValidationMessages": validationMessages,
-		"ErrorMessage":       &errorMessage,
-		"User":               user,
-	}
-	helpers.RenderTemplate(w, "layout_admin", "posts/view", data)
-}
-
-func DeletePost(w http.ResponseWriter, r *http.Request) {
-	_, err := helpers.GetUserByCookieName(helpers.CookieNameWithAuthToken, r)
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	id := r.URL.Query().Get("id")
+	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
+}
 
-	models.DeletePost(id)
+func FormUpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	form := forms.NewPostFormData("Novo post", user)
+	form.SetPostId(p.ByName("id"))
+	post := models.GetPost(form.Id)
+	if post.Id == 0 {
+		http.Redirect(w, r, "/admin/posts", http.StatusFound)
+		return
+	}
+	form.SetPost(*post)
+	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
+}
+
+func UpdatePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	form := forms.NewPostFormData("Novo post", user)
+	form.SetPostId(p.ByName("id"))
+	form.LoadFormData(r)
+	post := form.GetPost()
+	if validators.ValidatePost(&form) && post.Save() {
+		http.Redirect(w, r, "/admin/posts", http.StatusFound)
+		return
+	}
+	helpers.RenderTemplate(w, "layout_admin", "posts/form", form)
+}
+
+func ViewPost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	form := forms.NewPostFormData("Dados do post", user)
+	form.SetPostId(p.ByName("id"))
+	post := models.GetPost(form.Id)
+	if post.Id == 0 {
+		http.Redirect(w, r, "/admin/posts", http.StatusFound)
+		return
+	}
+	form.SetPost(*post)
+	helpers.RenderTemplate(w, "layout_admin", "posts/view", form)
+}
+
+func DeletePost(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
+	id := p.ByName("id")
+	idInt, _ := strconv.Atoi(id)
+	post := models.GetPost(idInt)
+	fmt.Println(id, idInt, post)
+	if post.Id > 0 {
+		post.Delete()
+	}
 	http.Redirect(w, r, "/admin/posts", http.StatusFound)
 }

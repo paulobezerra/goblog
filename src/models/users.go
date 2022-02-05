@@ -1,7 +1,9 @@
 package models
 
 import (
-	"github.com/paulobezerra/goblog/src/db"
+	"log"
+
+	"github.com/paulobezerra/goblog/src/configs"
 	"github.com/paulobezerra/goblog/src/utils"
 )
 
@@ -13,8 +15,8 @@ type User struct {
 	Password  string `json:"-"`
 }
 
-func GetUser(id string) User {
-	db := db.GetConnect()
+func GetUser(id int) User {
+	db := configs.GetConnect()
 
 	var user User
 	db.First(&user, id)
@@ -23,7 +25,7 @@ func GetUser(id string) User {
 }
 
 func FindOneUserByUsername(username string) User {
-	db := db.GetConnect()
+	db := configs.GetConnect()
 
 	var user User
 	db.Find(&user, "username = ?", username)
@@ -32,7 +34,7 @@ func FindOneUserByUsername(username string) User {
 }
 
 func FindAllUsers() []User {
-	db := db.GetConnect()
+	db := configs.GetConnect()
 
 	var users []User
 
@@ -41,35 +43,38 @@ func FindAllUsers() []User {
 	return users
 }
 
-func CreateUser(username string, firstname string, lastname string, password string) User {
-	db := db.GetConnect()
-
-	user := User{Username: username, Firstname: firstname, Lastname: lastname, Password: password}
-
-	db.Create(&user)
-
-	return user
-}
-
-func UpdateUser(id string, username string, firstname string, lastname string, password string) User {
-	db := db.GetConnect()
-
-	var user User
-	db.First(&user, id)
-
-	user.Username = username
-	user.Firstname = firstname
-	user.Lastname = lastname
-	if password != "" {
-		passwordHash, _ := utils.HashPassword(password)
-		user.Password = passwordHash
+func (user *User) Create() bool {
+	db := configs.GetConnect()
+	user.Password, _ = utils.HashPassword(user.Password)
+	if err := db.Create(&user).Error; err != nil {
+		log.Println(err)
+		return false
 	}
-	db.Save(&user)
-
-	return user
+	return true
 }
 
-func DeleteUser(id string) {
-	db := db.GetConnect()
-	db.Delete(&User{}, id)
+func (user *User) Save() bool {
+	db := configs.GetConnect()
+
+	oldUser := GetUser(user.Id)
+	password := oldUser.Password
+	if user.Password != "" {
+		password, _ = utils.HashPassword(user.Password)
+	}
+	user.Password = password
+
+	if err := db.Save(&user).Error; err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
+}
+
+func (user *User) Delete() bool {
+	db := configs.GetConnect()
+	if err := db.Delete(&user).Error; err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }

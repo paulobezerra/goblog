@@ -21,16 +21,16 @@
           </tr>
         </thead>
         <tbody>
-          {{range .users}}
+          {{range .Users}}
           <tr>
             <td>{{.Id}}</td>
             <td>{{.Username}}</td>
             <td>{{.Firstname}} {{.Lastname}}</td>
             <td>
-              <a class="btn link small" href="/admin/users/view?id={{.Id}}">Ver</a>
-              <a class="btn primary small" href="/admin/users/edit?id={{.Id}}">Editar</a>
+              <a class="btn link small" href="/admin/users/view/{{.Id}}">Ver</a>
+              <a class="btn primary small" href="/admin/users/edit/{{.Id}}">Editar</a>
               {{if ne .Username "admin"}}
-                <a class="btn danger small" href="/admin/users/delete?id={{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
+                <a class="btn danger small" href="/admin/users/delete/{{.Id}}" onclick="confirmarExclusao(event)">Excluir</a>
               {{- end}}
             </td>
           </tr>
