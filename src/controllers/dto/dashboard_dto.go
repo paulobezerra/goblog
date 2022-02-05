@@ -7,4 +7,5 @@ type DashboardDto struct {
 	PostsActive      string
 	UsersActive      string
 	CategoriesActive string
+	TagsActive       string
 }

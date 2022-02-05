@@ -38,6 +38,14 @@ func Init() *httprouter.Router {
 	router.POST("/admin/categories/edit/:id", validateToken(controllers.UpdateCategory))
 	router.GET("/admin/categories/delete/:id", validateToken(controllers.DeleteCategory))
 
+	router.GET("/admin/tags", validateToken(controllers.IndexTags))
+	router.GET("/admin/tags/new", validateToken(controllers.FormCreateTag))
+	router.POST("/admin/tags/new", validateToken(controllers.CreateTag))
+	router.GET("/admin/tags/view/:id", validateToken(controllers.ViewTag))
+	router.GET("/admin/tags/edit/:id", validateToken(controllers.FormUpdateTag))
+	router.POST("/admin/tags/edit/:id", validateToken(controllers.UpdateTag))
+	router.GET("/admin/tags/delete/:id", validateToken(controllers.DeleteTag))
+
 	router.GET("/admin/posts", validateToken(controllers.IndexPosts))
 	router.GET("/admin/posts/new", validateToken(controllers.FormCreatePost))
 	router.POST("/admin/posts/new", validateToken(controllers.CreatePost))

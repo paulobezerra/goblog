@@ -17,7 +17,7 @@ func IndexPosts(w http.ResponseWriter, r *http.Request, p httprouter.Params, use
 	data := map[string]interface{}{
 		"PostsActive": "active",
 		"User":        user,
-		"posts":       posts,
+		"Posts":       posts,
 	}
 	helpers.RenderTemplate(w, "layout_admin", "posts/index", data)
 }

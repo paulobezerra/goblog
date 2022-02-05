@@ -38,7 +38,7 @@ func CreateCategory(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 }
 
 func FormUpdateCategory(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
-	form := dto.NewCategoryDto("Nova categoria", user)
+	form := dto.NewCategoryDto("Editar categoria", user)
 	form.SetCategoryId(p.ByName("id"))
 	category := models.GetCategory(form.Id)
 	if category.Id == 0 {
@@ -50,7 +50,7 @@ func FormUpdateCategory(w http.ResponseWriter, r *http.Request, p httprouter.Par
 }
 
 func UpdateCategory(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
-	form := dto.NewCategoryDto("Novo category", user)
+	form := dto.NewCategoryDto("Editar categoria", user)
 	form.SetCategoryId(p.ByName("id"))
 	form.LoadFormData(r)
 	if validators.ValidateCategory(&form) && form.Category.Save() {
@@ -61,7 +61,7 @@ func UpdateCategory(w http.ResponseWriter, r *http.Request, p httprouter.Params,
 }
 
 func ViewCategory(w http.ResponseWriter, r *http.Request, p httprouter.Params, user models.User) {
-	form := dto.NewCategoryDto("Dados do category", user)
+	form := dto.NewCategoryDto("Dados da categoria", user)
 	form.SetCategoryId(p.ByName("id"))
 	category := models.GetCategory(form.Id)
 	if category.Id == 0 {

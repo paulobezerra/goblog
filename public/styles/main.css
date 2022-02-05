@@ -85,6 +85,11 @@ main header nav ul {
   gap: 10px;
 }
 
+main header nav ul li.active a {
+  font-weight: bold;
+  color: var(--primary)
+}
+
 main header nav ul li.exit a {
   color: var(--danger);
   border-radius: 5px;

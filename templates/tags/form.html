@@ -8,13 +8,13 @@
   <h2>{{.FormTitle}}</h2>
   <form class="vertical-form" method="post">
     <label>Descrição:</label>
-    <input type="text" name="description" placeholder="Descrição da categoria..." value="{{.Description}}" />
+    <input type="text" name="description" placeholder="Descrição da tag..." value="{{.Description}}" />
     <p class="error-message">{{.ValidationMessages.Description}}</p>
 
     <div class="actions">
       <p class="error-message"></p>
       <div class="btns">
-        <a href="/admin/categories" class="btn link">Voltar</a>
+        <a href="/admin/tags" class="btn link">Voltar</a>
         <button type="submit" class="btn primary">Salvar</button>
       </div>
     </div>
